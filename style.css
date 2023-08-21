@@ -7,7 +7,7 @@
 .mainClass{
     margin: auto;
     margin-top: 50px;
-    width: 300px;
+    width: 600px;
     height: 600px;
     background-color: black;
 
@@ -15,7 +15,18 @@
     flex-wrap: wrap;
 }
 
-.cell{
+.cell_odd{
+    background: #228b22;
+}
+
+.cell_even{
+    background: #2bb52b;
+}
+
+.snake_head{
     background: black;
-    border: 1px solid PaleTurquoise;
+}
+
+.snake_body{
+    background: cornflowerblue;
 }
