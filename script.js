@@ -18,6 +18,8 @@ let SNAKE = [];
 
 let gameInterval;
 
+let keyBlock = false;
+
 function setUpField(){
     const cellHeight = parseInt(getComputedStyle(main).height.replace('px', '')) / ROWS;
     const cellWidth =  parseInt(getComputedStyle(main).width.replace('px', ''))  / COLS;
@@ -77,6 +79,7 @@ function game(){
     if(MAP[SNAKE[0][0]][SNAKE[0][1]] === 'a'){
         document.getElementById(`cell_${SNAKE[0][0]}_${SNAKE[0][1]}`).classList.remove('apple');
         SNAKE.push([SNAKE[SNAKE.length - 1][0], SNAKE[SNAKE.length - 1][1]]);
+        spawnApple();
     }
 
     document.getElementById(`cell_${prevCellX}_${prevCellY}`).classList.remove('snake_head');
@@ -103,22 +106,32 @@ function game(){
             MAP[prevCellX][prevCellY] = 0;
         }
     }
+
+    keyBlock = false;
 }
 
 function changeDirections(){
     document.onkeydown = function (e) {
+        if(keyBlock){
+            return;
+        }
+
         switch(e.key){
             case 'ArrowUp':
-                currentDirection = 'Up';
+                currentDirection = currentDirection !== 'Down' ? 'Up' : 'Down';
+                keyBlock = true;
                 break;
             case 'ArrowDown':
-                currentDirection = 'Down';
+                currentDirection = currentDirection !== 'Up' ? 'Down' : 'Up';
+                keyBlock = true;
                 break;
             case 'ArrowLeft':
-                currentDirection = 'Left';
+                currentDirection = currentDirection !== 'Right' ? 'Left' : 'Right';
+                keyBlock = true;
                 break;
             case 'ArrowRight':
-                currentDirection = 'Right';
+                currentDirection = currentDirection !== 'Left' ? 'Right' : 'Left';
+                keyBlock = true;
                 break;
         }
     };
@@ -142,4 +155,4 @@ function spawnApple(){
 }
 
 setUpField();
-gameInterval = setInterval(game, 500);
+gameInterval = setInterval(game, 250);
