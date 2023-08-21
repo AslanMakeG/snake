@@ -53,6 +53,9 @@ function setUpField(){
     document.getElementById(`cell_${posX - 1}_${posY}`).classList.add('snake_head');
     document.getElementById(`cell_${posX}_${posY}`).classList.add('snake_body');
     document.getElementById(`cell_${posX + 1}_${posY}`).classList.add('snake_body');
+
+    spawnApple();
+    changeDirections();
 }
 
 function game(){
@@ -67,12 +70,19 @@ function game(){
 
         clearInterval(gameInterval);
         console.log('GAME OVER!');
-        
+
         return;
+    }
+
+    if(MAP[SNAKE[0][0]][SNAKE[0][1]] === 'a'){
+        document.getElementById(`cell_${SNAKE[0][0]}_${SNAKE[0][1]}`).classList.remove('apple');
+        SNAKE.push([SNAKE[SNAKE.length - 1][0], SNAKE[SNAKE.length - 1][1]]);
     }
 
     document.getElementById(`cell_${prevCellX}_${prevCellY}`).classList.remove('snake_head');
     document.getElementById(`cell_${SNAKE[0][0]}_${SNAKE[0][1]}`).classList.add('snake_head');
+
+    MAP[SNAKE[0][0]][SNAKE[0][1]] = 'h';
 
     for(let i = 1; i < SNAKE.length; i++){
         let tempX = SNAKE[i][0];
@@ -86,8 +96,50 @@ function game(){
 
         document.getElementById(`cell_${prevCellX}_${prevCellY}`).classList.remove('snake_body');
         document.getElementById(`cell_${SNAKE[i][0]}_${SNAKE[i][1]}`).classList.add('snake_body');
+
+        MAP[SNAKE[i][0]][SNAKE[i][1]] = 'b';
+
+        if(i === SNAKE.length - 1){
+            MAP[prevCellX][prevCellY] = 0;
+        }
     }
 }
 
+function changeDirections(){
+    document.onkeydown = function (e) {
+        switch(e.key){
+            case 'ArrowUp':
+                currentDirection = 'Up';
+                break;
+            case 'ArrowDown':
+                currentDirection = 'Down';
+                break;
+            case 'ArrowLeft':
+                currentDirection = 'Left';
+                break;
+            case 'ArrowRight':
+                currentDirection = 'Right';
+                break;
+        }
+    };
+}
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+  
+function spawnApple(){
+    let randomX = getRandomInt(COLS);
+    let randomY = getRandomInt(ROWS);
+
+    if(MAP[randomX][randomY] === 0){
+        MAP[randomX][randomY] = 'a'
+        document.getElementById(`cell_${randomX}_${randomY}`).classList.add('apple');
+        return;
+    }
+    
+    spawnApple();
+}
+
 setUpField();
-gameInterval = setInterval(game, 1000); 
+gameInterval = setInterval(game, 500);

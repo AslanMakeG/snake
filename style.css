@@ -30,3 +30,9 @@
 .snake_body{
     background: cornflowerblue;
 }
+
+.apple{
+    background-image: url('apple.png');
+    background-repeat: no-repeat; 
+    background-size: 100% 100%;
+}
